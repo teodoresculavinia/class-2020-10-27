@@ -15,7 +15,7 @@ library(tidyverse)
 
 week_8 <- trains %>% 
   mutate(att_chg = att_end - att_start) %>% 
-  select(att_chg, gender, party, treatment)
+  select(att_chg, gender, liberal, treatment)
   
 ```
 
