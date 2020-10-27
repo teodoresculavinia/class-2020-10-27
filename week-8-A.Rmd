@@ -31,7 +31,7 @@ Weeks 7, 8 and 9 are the core of the class. We have a question. We have some dat
 * `att_chg` as a function of `gender`
 
 
-* `att_chg` as a function of `party`
+* `att_chg` as a function of `liberal`
 
 
 * `att_chg` as a function of `treatment`
