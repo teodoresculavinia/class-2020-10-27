@@ -37,6 +37,15 @@ Weeks 7, 8 and 9 are the core of the class. We have a question. We have some dat
 * `att_chg` as a function of `treatment`
 
 
+```{r}
+
+fit_obj_3 <- stan_glm(att_chg~treatment - 1, data = week_8, family = gaussian(), refresh = 0)
+fit_obj_3
+
+```
+
+
+
 
 
 
@@ -44,6 +53,28 @@ Weeks 7, 8 and 9 are the core of the class. We have a question. We have some dat
 
 **Prompt:** For the model with `att_chg` as a function of `treatment`, create posterior probability densities for the two important parameters. Write a paragraph interpreting the meaning of those posteriors. 
 
+```{r}
+fit_obj_3 %>% 
+  as_tibble() %>% 
+  select(-sigma) %>%
+  mutate(Treated = treatmentTreated, Control = treatmentControl) %>%
+  pivot_longer(cols = Treated:Control,
+               names_to = "parameter",
+               values_to = "att_change") %>%
+  ggplot(aes(x = att_change, color = parameter)) +
+  geom_histogram(aes(y = after_stat(count/sum(count))),
+                 alpha = 0.7, 
+                 bins = 100, 
+                 position = "identity", 
+                 fill = "black") +
+  labs(title = "Posterior Probability Distribution",
+       subtitle = "Change in Attitude in Control v. Treatment Groups",
+       x = "Attitude Chanage",
+       y = "Probability") + 
+theme_classic() +    
+scale_y_continuous(labels = scales::percent_format())
+
+```
 
 
 
@@ -51,5 +82,26 @@ Weeks 7, 8 and 9 are the core of the class. We have a question. We have some dat
 
 **Prompt:** Create a plot of the the posterior for the average treatment effect. Write a paragraph interpreting the plot.
 
+```{r}
+
+fit_obj_3 %>% 
+  as_tibble() %>% 
+  select(-sigma) %>%
+  mutate(Treated = treatmentTreated, Control = treatmentControl) %>%
+  mutate(ate = Treated - Control) %>%
+  ggplot(aes(x = ate)) +
+  geom_histogram(aes(y = after_stat(count/sum(count)), fill = after_stat(count)),
+                 alpha = 0.9, 
+                 bins = 100, 
+                 position = "identity") +
+  labs(title = "Posterior Probability Distribution",
+       subtitle = "Change in Attitude in Control v. Treatment Groups",
+       x = "Attitude Chanage",
+       y = "Probability") + 
+theme_classic() +    
+scale_y_continuous(labels = scales::percent_format()) +
+scale_fill_gradient(low = "pink", high = "purple")
+
+```
 
 
